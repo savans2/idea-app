@@ -1,15 +1,29 @@
 import React from 'react'
+import firebase from 'firebase';
 
 export default function IdeaForm() {
+
+  function createIdea() {
+    firebase.database().ref('ideas/' + Date.now()).set({
+      id: 1,
+      date: Date.now(),
+      shortName: document.querySelector('#IdeaName').value,
+      description: document.querySelector('#IdeaDescription').value,
+      rating: document.querySelector('#IdeaRating').value,
+      category: document.querySelector('#IdeaCategory').value,
+      expectations: document.querySelector('#IdeaExpectations').value,
+    });
+  }
+
   return (
-    <div>
+    <form className="col-lg-8 col-12">
       <div className="form-group">
         <label>Idea name</label>
-        <input type="text" className="form-control" placeholder='"App that is going to work instead of me"' />
+        <input type="text" id="IdeaName" className="form-control" placeholder='"App that is going to work instead of me"' />
       </div>
       <div className="d-flex flex-wrap">
         <label>Idea category</label>
-        <select className="form-control" >
+        <select id="IdeaCategory" className="form-control" >
           <option>1</option>
           <option>2</option>
           <option>3</option>
@@ -19,13 +33,17 @@ export default function IdeaForm() {
       </div>
       <div className="form-group">
         <label>Idea description</label>
-        <textarea className="form-control" rows="3" placeholder='"This app is going to work instead of me while i take a break and play video games"'></textarea>
+        <textarea className="form-control" rows="3" id="IdeaDescription" placeholder='"This app is going to work instead of me while i take a break and play video games"'></textarea>
       </div>
       <div className="form-group">
-        <label>Idea expectation</label>
-        <textarea className="form-control" rows="3" placeholder='"Makes money by doing my job/work"'></textarea>
+        <label>Idea expectations</label>
+        <textarea className="form-control" id="IdeaExpectations" rows="3" placeholder='"Makes money by doing my job/work"'></textarea>
       </div>
-      <input type="button" className="btn btn-primary" value="Submit idea" />
-    </div>
+      <div className="form-group">
+        <label>Rate idea</label>
+        <input className="form-control" id="IdeaRating" type="number" min="0" max="10" placeholder="0-10" />
+      </div>
+      <input type="button" className="btn btn-primary" value="Create idea" onClick={() => { createIdea() }} />
+    </form>
   )
 }
