@@ -1,31 +1,44 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import firebase from 'firebase';
 
 export default function IdeaList() {
+  const [ideas, setIdeas] = useState();
+
+  useEffect(() => {
+    firebase.database().ref('ideas/')
+      .on('value', function (snapshot) {
+        setIdeas(snapshot.val());
+      });
+  }, []);
+
+  function renderIdeas() {
+    return Object.keys(ideas).map((key, i) => {
+      return (
+        <li className={`list-group-item d-flex justify-content-between ${i === 0 ? 'active' : ''}`} key={key} >
+          <span>{ideas[key].shortName}</span>
+          <div className="d-flex align-items-center">
+            <span style={{ height: '31px', width: '32px' }} className="user-select-none border border-success mx-1 p-1" onClick={() => { updateIdea(key) }}>✏</span>
+            <span style={{ height: '31px', width: '32px' }} className="user-select-none border border-danger border mx-1 p-1" onClick={() => { deleteIdea(key) }}>🗑</span>
+          </div>
+        </li >);
+    })
+  }
+
+  function updateIdea(key) {
+    firebase.database().ref('ideas/' + key).update({
+      // update properties
+    })
+  }
+
+  function deleteIdea(key) {
+    firebase.database().ref('ideas/' + key).remove();
+  }
+
   return (
     <div className="col-12 col-lg-4">
       <ul class="list-group">
         <p className="mb-2">List of ideas</p>
-        <li className="list-group-item d-flex justify-content-between active">
-          <span>Morbi leo risus</span>
-          <div className="d-flex align-items-center">
-            <span style={{ height: '31px', width: '32px' }} className="user-select-none border border-success mx-1 p-1">✏</span>
-            <span style={{ height: '31px', width: '32px' }} className="user-select-none border border-danger border mx-1 p-1">🗑</span>
-          </div>
-        </li>
-        <li className="list-group-item d-flex justify-content-between">
-          <span>Porta ac consectetur ac</span>
-          <div className="d-flex align-items-center">
-            <span style={{ height: '31px', width: '32px' }} className="user-select-none border border-success mx-1 p-1">✏</span>
-            <span style={{ height: '31px', width: '32px' }} className="user-select-none border border-danger border mx-1 p-1">🗑</span>
-          </div>
-        </li>
-        <li className="list-group-item d-flex justify-content-between">
-          <span>Dapibus ac facilisis in</span>
-          <div className="d-flex align-items-center">
-            <span style={{ height: '31px', width: '32px' }} className="user-select-none border border-success mx-1 p-1">✏</span>
-            <span style={{ height: '31px', width: '32px' }} className="user-select-none border border-danger border mx-1 p-1">🗑</span>
-          </div>
-        </li>
+        {ideas !== undefined ? renderIdeas() : ''}
       </ul>
       <div className="my-5 mx-auto">
         <input className="btn btn btn-outline-primary mx-1" type="button" value="&laquo;" />
