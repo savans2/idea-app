@@ -43,7 +43,7 @@ export default function IdeaList() {
   return (
     <div className="w-100 d-flex flex-wrap">
       <div className="col-12 col-lg-4 my-5">
-        <ul class="list-group">
+        <ul className="list-group">
           <p className="mb-2">List of ideas</p>
           {renderIdeas()}
         </ul>
