@@ -53,9 +53,9 @@ export default function IdeaList() {
         </ul>
         <div className="my-5 mx-auto">
           <input className="btn btn btn-outline-primary mx-1" type="button" value="&laquo;" />
-          <input className="btn btn-primary mx-1" type="button" value={ideaPage - 1} disabled={ideaPage - 1 <= 0 ? true : false} />
-          <input className="btn btn-primary mx-1" type="button" value={ideaPage} />
-          <input className="btn btn-primary mx-1" type="button" value={ideaPage + 1} disabled={ideaPage + 1 > ideas.length ? true : false} />
+          <input className="btn btn-primary mx-1" type="button" value={ideaPage - 1} disabled={ideaPage - 1 <= 0 ? true : false} onClick={() => setIdeaPage(ideaPage - 1)} />
+          <input className="btn btn-primary mx-1" type="button" value={ideaPage} disabled />
+          <input className="btn btn-primary mx-1" type="button" value={ideaPage + 1} disabled={ideaPage + 1 > ideas.length ? true : false} onClick={() => setIdeaPage(ideaPage + 1)} />
           <input className="btn btn btn-outline-primary mx-1" type="button" value="&raquo;" />
         </div>
       </div>
