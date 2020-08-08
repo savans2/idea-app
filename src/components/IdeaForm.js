@@ -1,7 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import firebase from 'firebase';
 
 export default function IdeaForm(props) {
+  const [categories, setCategories] = useState();
+
+  useEffect(() => {
+    firebase.database().ref('categories/')
+      .on('value', function (snapshot) {
+        setCategories(snapshot.val());
+      });
+  }, []);
 
   function createIdea() {
     firebase.database().ref('ideas/' + Date.now()).set({
@@ -21,6 +29,12 @@ export default function IdeaForm(props) {
     })
   }
 
+  function renderCategories() {
+    return categories.map(category => {
+      return <option key={category}>{category}</option>
+    })
+  }
+
   return (
     <form className="col-lg-8 col-12 my-5">
       <div className="form-group">
@@ -30,11 +44,7 @@ export default function IdeaForm(props) {
       <div className="d-flex flex-wrap">
         <label>Idea category</label>
         <select id="IdeaCategory" className="form-control" >
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
+          {categories ? renderCategories() : ''}
         </select>
       </div>
       <div className="form-group">
