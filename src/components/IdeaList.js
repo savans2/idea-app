@@ -5,6 +5,7 @@ import IdeaForm from './IdeaForm';
 
 export default function IdeaList() {
   const [ideas, setIdeas] = useState();
+  const [updateIdea, setUpdateIdea] = useState({ update: false, key: '' });
 
   useEffect(() => {
     firebase.database().ref('ideas/')
@@ -20,18 +21,19 @@ export default function IdeaList() {
           <li className={`list-group-item d-flex justify-content-between ${i === 0 ? 'active' : ''}`} key={key} >
             <span>{ideas[key].shortName}</span>
             <div className="d-flex align-items-center">
-              <span style={{ height: '31px', width: '32px' }} className="user-select-none border border-success mx-1 p-1" onClick={() => { updateIdea(key) }}>✏</span>
+              <span
+                style={{ height: '31px', width: '32px' }}
+                className="user-select-none border border-success mx-1 p-1"
+                onClick={() => {
+                  setUpdateIdea({ update: !updateIdea.update, key })
+                }}>
+                {updateIdea.update ? '❌' : '✏'}
+              </span>
               <span style={{ height: '31px', width: '32px' }} className="user-select-none border border-danger border mx-1 p-1" onClick={() => { deleteIdea(key) }}>🗑</span>
             </div>
           </li >);
       })
     }
-  }
-
-  function updateIdea(key) {
-    firebase.database().ref('ideas/' + key).update({
-      // update properties
-    })
   }
 
   function deleteIdea(key) {
@@ -53,7 +55,7 @@ export default function IdeaList() {
           <input className="btn btn btn-outline-primary mx-1" type="button" value="&raquo;" />
         </div>
       </div>
-      <IdeaForm />
+      <IdeaForm updateIdea={updateIdea} />
       <IdeaPreview />
     </div>
   )
