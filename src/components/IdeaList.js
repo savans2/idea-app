@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import firebase from 'firebase';
+import IdeaPreview from './IdeaPreview';
+import IdeaForm from './IdeaForm';
 
 export default function IdeaList() {
   const [ideas, setIdeas] = useState();
@@ -37,18 +39,22 @@ export default function IdeaList() {
   }
 
   return (
-    <div className="col-12 col-lg-4 my-5">
-      <ul class="list-group">
-        <p className="mb-2">List of ideas</p>
-        {renderIdeas()}
-      </ul>
-      <div className="my-5 mx-auto">
-        <input className="btn btn btn-outline-primary mx-1" type="button" value="&laquo;" />
-        <input className="btn btn-primary mx-1" type="button" value={0} />
-        <input className="btn btn-primary mx-1" type="button" value={1} />
-        <input className="btn btn-primary mx-1" type="button" value={2} />
-        <input className="btn btn btn-outline-primary mx-1" type="button" value="&raquo;" />
+    <div className="w-100 d-flex flex-wrap">
+      <div className="col-12 col-lg-4 my-5">
+        <ul class="list-group">
+          <p className="mb-2">List of ideas</p>
+          {renderIdeas()}
+        </ul>
+        <div className="my-5 mx-auto">
+          <input className="btn btn btn-outline-primary mx-1" type="button" value="&laquo;" />
+          <input className="btn btn-primary mx-1" type="button" value={0} />
+          <input className="btn btn-primary mx-1" type="button" value={1} />
+          <input className="btn btn-primary mx-1" type="button" value={2} />
+          <input className="btn btn btn-outline-primary mx-1" type="button" value="&raquo;" />
+        </div>
       </div>
+      <IdeaForm />
+      <IdeaPreview />
     </div>
   )
 }
