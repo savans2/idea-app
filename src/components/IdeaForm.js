@@ -16,7 +16,7 @@ export default function IdeaForm() {
   }
 
   return (
-    <form className="col-lg-8 col-12">
+    <form className="col-lg-8 col-12 my-5">
       <div className="form-group">
         <label>Idea name</label>
         <input type="text" id="IdeaName" className="form-control" placeholder='"App that is going to work instead of me"' />
