@@ -1,7 +1,7 @@
 import React from 'react'
 import firebase from 'firebase';
 
-export default function IdeaForm() {
+export default function IdeaForm(props) {
 
   function createIdea() {
     firebase.database().ref('ideas/' + Date.now()).set({
@@ -13,6 +13,12 @@ export default function IdeaForm() {
       category: document.querySelector('#IdeaCategory').value,
       expectations: document.querySelector('#IdeaExpectations').value,
     });
+  }
+
+  function updateIdea(key) {
+    firebase.database().ref('ideas/' + key).update({
+      // update properties
+    })
   }
 
   return (
@@ -43,7 +49,12 @@ export default function IdeaForm() {
         <label>Rate idea</label>
         <input className="form-control" id="IdeaRating" type="number" min="0" max="10" placeholder="0-10" />
       </div>
-      <input type="button" className="btn btn-primary" value="Create idea" onClick={() => { createIdea() }} />
+      {
+        props.updateIdea.update ?
+          <input type="button" className="btn btn-success" value="Update idea" onClick={() => { updateIdea(props.updateIdea.key) }} />
+          :
+          <input type="button" className="btn btn-primary" value="Create idea" onClick={() => { createIdea() }} />
+      }
     </form>
   )
 }
