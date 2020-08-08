@@ -2,38 +2,42 @@ import React, { useState, useEffect } from 'react'
 import firebase from 'firebase';
 import IdeaPreview from './IdeaPreview';
 import IdeaForm from './IdeaForm';
+import { chunkObj } from '../utility/helperFunctions';
 
 export default function IdeaList() {
-  const [ideas, setIdeas] = useState();
+  const [ideas, setIdeas] = useState([]);
   const [updateIdea, setUpdateIdea] = useState({ update: false, key: '' });
+  const [ideaPage, setIdeaPage] = useState(1);
 
   useEffect(() => {
     firebase.database().ref('ideas/')
       .on('value', function (snapshot) {
-        setIdeas(snapshot.val());
+        setIdeas(chunkObj(snapshot.val(), 10));
       });
   }, []);
 
   function renderIdeas() {
-    if (ideas) {
-      return Object.keys(ideas).map((key, i) => {
+    if (ideas && ideas.length !== 0) {
+      return ideas[ideaPage - 1].map((idea, i) => {
         return (
-          <li className={`list-group-item d-flex justify-content-between ${i === 0 ? 'active' : ''}`} key={key} >
-            <span>{ideas[key].shortName}</span>
+          <li className={`list-group-item d-flex justify-content-between ${i === 0 ? 'active' : ''}`} key={idea.id} >
+            <span>{idea.shortName}</span>
             <div className="d-flex align-items-center">
               <span
                 style={{ height: '31px', width: '32px' }}
                 className="user-select-none border border-success mx-1 p-1"
                 onClick={() => {
-                  setUpdateIdea({ update: !updateIdea.update, key })
+                  setUpdateIdea({ update: !updateIdea.update, key: idea.id })
                 }}>
                 {updateIdea.update ? '❌' : '✏'}
               </span>
-              <span style={{ height: '31px', width: '32px' }} className="user-select-none border border-danger border mx-1 p-1" onClick={() => { deleteIdea(key) }}>🗑</span>
+              <span style={{ height: '31px', width: '32px' }} className="user-select-none border border-danger border mx-1 p-1" onClick={() => { deleteIdea(idea.id) }}>🗑</span>
             </div>
-          </li >);
-      })
+          </li >
+        );
+      });
     }
+
   }
 
   function deleteIdea(key) {
@@ -49,9 +53,9 @@ export default function IdeaList() {
         </ul>
         <div className="my-5 mx-auto">
           <input className="btn btn btn-outline-primary mx-1" type="button" value="&laquo;" />
-          <input className="btn btn-primary mx-1" type="button" value={0} />
-          <input className="btn btn-primary mx-1" type="button" value={1} />
-          <input className="btn btn-primary mx-1" type="button" value={2} />
+          <input className="btn btn-primary mx-1" type="button" value={ideaPage - 1} disabled={ideaPage - 1 <= 0 ? true : false} />
+          <input className="btn btn-primary mx-1" type="button" value={ideaPage} />
+          <input className="btn btn-primary mx-1" type="button" value={ideaPage + 1} disabled={ideaPage + 1 > ideas.length ? true : false} />
           <input className="btn btn btn-outline-primary mx-1" type="button" value="&raquo;" />
         </div>
       </div>
