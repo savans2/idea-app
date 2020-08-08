@@ -12,9 +12,10 @@ export default function IdeaForm(props) {
   }, []);
 
   function createIdea() {
-    firebase.database().ref('ideas/' + Date.now()).set({
-      id: 1,
-      date: Date.now(),
+    const time = Date.now();
+    firebase.database().ref('ideas/' + time).set({
+      id: time,
+      date: time,
       shortName: document.querySelector('#IdeaName').value,
       description: document.querySelector('#IdeaDescription').value,
       rating: document.querySelector('#IdeaRating').value,
