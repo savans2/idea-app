@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import firebase from 'firebase';
+import EditCategories from './EditCategories';
 
 export default function IdeaForm(props) {
   const [categories, setCategories] = useState();
+  const [editCategories, setEditCategories] = useState(false);
 
   useEffect(() => {
     firebase.database().ref('categories/')
@@ -56,10 +58,19 @@ export default function IdeaForm(props) {
         />
       </div>
       <div className="d-flex flex-wrap">
-        <label>Idea category</label>
+        <label>
+          Idea category
+          <span
+            style={{ height: '31px', width: '32px' }}
+            className={`user-select-none border ${editCategories ? 'border-danger' : 'border-success'} border mx-1 p-1`}
+            onClick={() => { setEditCategories(!editCategories) }}>
+            {editCategories ? '❌' : '✏'}
+          </span>
+        </label>
         <select id="IdeaCategory" className="form-control" >
           {categories ? renderCategories() : ''}
         </select>
+        {editCategories ? <EditCategories selectedCategory={document.querySelector('#IdeaCategory')} categories={categories} /> : ''}
       </div>
       <div className="form-group">
         <label>Idea description</label>
