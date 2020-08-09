@@ -8,17 +8,20 @@ export function chunkObj(obj, size) {
   const tempArray = [];
   let chunk = [];
 
-  Object.keys(obj).forEach((key, i) => {
-    if (chunk.length === size) {
-      tempArray.push(chunk)
-      chunk = []
-    }
-    chunk.push(obj[key]);
-  })
+  if (obj) {
+    Object.keys(obj).forEach((key, i) => {
+      if (chunk.length === size) {
+        tempArray.push(chunk)
+        chunk = []
+      }
+      chunk.push(obj[key]);
+    })
 
-  if (chunk.length !== 0) {
-    tempArray.push(chunk);
+    if (chunk.length !== 0) {
+      tempArray.push(chunk);
+    }
   }
+
 
   return tempArray;
 }
