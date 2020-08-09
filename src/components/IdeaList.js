@@ -8,11 +8,14 @@ export default function IdeaList() {
   const [ideas, setIdeas] = useState([]);
   const [updateIdea, setUpdateIdea] = useState({ update: false, key: '' });
   const [ideaPage, setIdeaPage] = useState(1);
+  const [selectedIdea, setSelectedIdea] = useState({});
 
   useEffect(() => {
     firebase.database().ref('ideas/')
       .on('value', function (snapshot) {
-        setIdeas(chunkObj(snapshot.val(), 10));
+        const chunkedIdeas = chunkObj(snapshot.val(), 5);
+        setIdeas(chunkedIdeas);
+        setSelectedIdea(chunkedIdeas[0] !== undefined ? chunkedIdeas[0][0] : {})
       });
   }, []);
 
@@ -20,7 +23,11 @@ export default function IdeaList() {
     if (ideas && ideas.length !== 0) {
       return ideas[ideaPage - 1].map((idea, i) => {
         return (
-          <li className={`list-group-item d-flex justify-content-between ${i === 0 ? 'active' : ''}`} key={idea.id} >
+          <li
+            className={`list-group-item d-flex justify-content-between ${idea.id === selectedIdea.id ? 'active' : ''}`}
+            key={idea.id}
+            onClick={() => setSelectedIdea(idea)}
+          >
             <span>{idea.shortName}</span>
             <div className="d-flex align-items-center">
               <span
@@ -60,7 +67,7 @@ export default function IdeaList() {
         </div>
       </div>
       <IdeaForm updateIdea={updateIdea} />
-      <IdeaPreview />
+      <IdeaPreview idea={selectedIdea} />
     </div>
   )
 }
