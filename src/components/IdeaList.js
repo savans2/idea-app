@@ -27,7 +27,7 @@ export default function IdeaList() {
                 style={{ height: '31px', width: '32px' }}
                 className="user-select-none border border-success mx-1 p-1"
                 onClick={() => {
-                  setUpdateIdea({ update: !updateIdea.update, key: idea.id })
+                  setUpdateIdea({ update: !updateIdea.update, idea })
                 }}>
                 {updateIdea.update ? '❌' : '✏'}
               </span>
@@ -40,8 +40,8 @@ export default function IdeaList() {
 
   }
 
-  function deleteIdea(key) {
-    firebase.database().ref('ideas/' + key).remove();
+  function deleteIdea(id) {
+    firebase.database().ref('ideas/' + id).remove();
   }
 
   return (
