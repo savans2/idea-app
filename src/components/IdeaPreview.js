@@ -1,10 +1,8 @@
 import React from 'react'
 
 export default function IdeaPreview(props) {
-
   let date = new Date(props.idea.date)
-  date = `${date.getDay()}.${date.getDate()}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
-  console.log(props.idea.shortName ? 'a' : 'b');
+  date = `${date.toDateString()} ${date.getHours()}:${date.getMinutes()}`
 
   return (
     <div className="bg-light my-3 col-12">
